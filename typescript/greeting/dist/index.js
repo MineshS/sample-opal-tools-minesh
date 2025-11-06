@@ -68,6 +68,250 @@ async function todaysDate(parameters) {
         timestamp: today.getTime() / 1000
     };
 }
+/**
+ * Random Generator Tool: Generates random values (numbers, UUIDs, passwords)
+ */
+async function randomGenerator(parameters) {
+    const { type, min = 0, max = 100, length = 12 } = parameters;
+    switch (type.toLowerCase()) {
+        case 'number':
+            const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            return {
+                type: 'number',
+                value: randomNum,
+                range: `${min}-${max}`
+            };
+        case 'uuid':
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            return {
+                type: 'uuid',
+                value: uuid
+            };
+        case 'password':
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return {
+                type: 'password',
+                value: password,
+                length: length
+            };
+        default:
+            throw new Error(`Unsupported type: ${type}. Use 'number', 'uuid', or 'password'`);
+    }
+}
+/**
+ * String Utility Tool: Performs various string operations
+ */
+async function stringUtility(parameters) {
+    const { text, operation } = parameters;
+    let result;
+    switch (operation.toLowerCase()) {
+        case 'uppercase':
+            result = text.toUpperCase();
+            break;
+        case 'lowercase':
+            result = text.toLowerCase();
+            break;
+        case 'reverse':
+            result = text.split('').reverse().join('');
+            break;
+        case 'slug':
+            result = text
+                .toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_-]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            break;
+        case 'capitalize':
+            result = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            break;
+        case 'title':
+            result = text
+                .toLowerCase()
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            break;
+        default:
+            throw new Error(`Unsupported operation: ${operation}. Use 'uppercase', 'lowercase', 'reverse', 'slug', 'capitalize', or 'title'`);
+    }
+    return {
+        original: text,
+        operation: operation,
+        result: result
+    };
+}
+/**
+ * Math Calculator Tool: Performs mathematical operations
+ */
+async function mathCalculator(parameters) {
+    const { operation, a, b = 0 } = parameters;
+    let result;
+    switch (operation.toLowerCase()) {
+        case 'add':
+            result = a + b;
+            break;
+        case 'subtract':
+            result = a - b;
+            break;
+        case 'multiply':
+            result = a * b;
+            break;
+        case 'divide':
+            if (b === 0) {
+                throw new Error('Cannot divide by zero');
+            }
+            result = a / b;
+            break;
+        case 'power':
+            result = Math.pow(a, b);
+            break;
+        case 'sqrt':
+            if (a < 0) {
+                throw new Error('Cannot calculate square root of negative number');
+            }
+            result = Math.sqrt(a);
+            break;
+        case 'percentage':
+            result = (a / 100) * b;
+            break;
+        case 'abs':
+            result = Math.abs(a);
+            break;
+        case 'round':
+            result = Math.round(a);
+            break;
+        case 'floor':
+            result = Math.floor(a);
+            break;
+        case 'ceil':
+            result = Math.ceil(a);
+            break;
+        default:
+            throw new Error(`Unsupported operation: ${operation}`);
+    }
+    return {
+        operation: operation,
+        input: b !== 0 || ['add', 'subtract', 'multiply', 'divide', 'power', 'percentage'].includes(operation.toLowerCase())
+            ? { a, b }
+            : { a },
+        result: result
+    };
+}
+/**
+ * Unit Converter Tool: Converts between different units
+ */
+async function unitConverter(parameters) {
+    const { value, from, to, category } = parameters;
+    let result;
+    switch (category.toLowerCase()) {
+        case 'temperature':
+            result = convertTemperature(value, from, to);
+            break;
+        case 'distance':
+            result = convertDistance(value, from, to);
+            break;
+        case 'weight':
+            result = convertWeight(value, from, to);
+            break;
+        default:
+            throw new Error(`Unsupported category: ${category}. Use 'temperature', 'distance', or 'weight'`);
+    }
+    return {
+        value: value,
+        from: from,
+        to: to,
+        category: category,
+        result: result
+    };
+}
+function convertTemperature(value, from, to) {
+    const conversions = {
+        'celsius-fahrenheit': (v) => (v * 9 / 5) + 32,
+        'celsius-kelvin': (v) => v + 273.15,
+        'fahrenheit-celsius': (v) => (v - 32) * 5 / 9,
+        'fahrenheit-kelvin': (v) => ((v - 32) * 5 / 9) + 273.15,
+        'kelvin-celsius': (v) => v - 273.15,
+        'kelvin-fahrenheit': (v) => ((v - 273.15) * 9 / 5) + 32
+    };
+    const key = `${from.toLowerCase()}-${to.toLowerCase()}`;
+    if (conversions[key]) {
+        return Math.round(conversions[key](value) * 100) / 100;
+    }
+    throw new Error(`Unsupported temperature conversion: ${from} to ${to}`);
+}
+function convertDistance(value, from, to) {
+    const toMeters = {
+        'meter': 1,
+        'kilometer': 1000,
+        'mile': 1609.34,
+        'foot': 0.3048,
+        'inch': 0.0254,
+        'yard': 0.9144
+    };
+    const fromRate = toMeters[from.toLowerCase()];
+    const toRate = toMeters[to.toLowerCase()];
+    if (!fromRate || !toRate) {
+        throw new Error(`Unsupported distance units: ${from} or ${to}`);
+    }
+    return Math.round((value * fromRate / toRate) * 100) / 100;
+}
+function convertWeight(value, from, to) {
+    const toGrams = {
+        'gram': 1,
+        'kilogram': 1000,
+        'pound': 453.592,
+        'ounce': 28.3495,
+        'ton': 1000000
+    };
+    const fromRate = toGrams[from.toLowerCase()];
+    const toRate = toGrams[to.toLowerCase()];
+    if (!fromRate || !toRate) {
+        throw new Error(`Unsupported weight units: ${from} or ${to}`);
+    }
+    return Math.round((value * fromRate / toRate) * 100) / 100;
+}
+/**
+ * Text Analyzer Tool: Analyzes text and provides statistics
+ */
+async function textAnalyzer(parameters) {
+    const { text } = parameters;
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0);
+    const wordFrequency = {};
+    words.forEach(word => {
+        const cleanWord = word.toLowerCase().replace(/[^\w]/g, '');
+        if (cleanWord) {
+            wordFrequency[cleanWord] = (wordFrequency[cleanWord] || 0) + 1;
+        }
+    });
+    const mostCommon = Object.entries(wordFrequency)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([word, count]) => ({ word, count }));
+    const avgWordLength = words.reduce((sum, word) => sum + word.length, 0) / (words.length || 1);
+    const avgSentenceLength = words.length / (sentences.length || 1);
+    return {
+        characters: text.length,
+        charactersNoSpaces: text.replace(/\s/g, '').length,
+        words: words.length,
+        sentences: sentences.length,
+        paragraphs: paragraphs.length,
+        averageWordLength: Math.round(avgWordLength * 100) / 100,
+        averageSentenceLength: Math.round(avgSentenceLength * 100) / 100,
+        mostCommonWords: mostCommon,
+        readingTimeMinutes: Math.ceil(words.length / 200) // Assuming 200 words per minute
+    };
+}
 // Register the tools using decorators with explicit parameter definitions
 (0, opal_tools_sdk_1.tool)({
     name: 'greeting',
@@ -99,6 +343,120 @@ async function todaysDate(parameters) {
         }
     ]
 })(todaysDate);
+(0, opal_tools_sdk_1.tool)({
+    name: 'random-generator',
+    description: 'Generates random values (number, UUID, or password)',
+    parameters: [
+        {
+            name: 'type',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Type of random value to generate: "number", "uuid", or "password"',
+            required: true
+        },
+        {
+            name: 'min',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'Minimum value for random number (default: 0)',
+            required: false
+        },
+        {
+            name: 'max',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'Maximum value for random number (default: 100)',
+            required: false
+        },
+        {
+            name: 'length',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'Length of generated password (default: 12)',
+            required: false
+        }
+    ]
+})(randomGenerator);
+(0, opal_tools_sdk_1.tool)({
+    name: 'string-utility',
+    description: 'Performs string operations: uppercase, lowercase, reverse, slug, capitalize, or title case',
+    parameters: [
+        {
+            name: 'text',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'The text to transform',
+            required: true
+        },
+        {
+            name: 'operation',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Operation to perform: "uppercase", "lowercase", "reverse", "slug", "capitalize", or "title"',
+            required: true
+        }
+    ]
+})(stringUtility);
+(0, opal_tools_sdk_1.tool)({
+    name: 'math-calculator',
+    description: 'Performs mathematical operations: add, subtract, multiply, divide, power, sqrt, percentage, abs, round, floor, ceil',
+    parameters: [
+        {
+            name: 'operation',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Math operation to perform',
+            required: true
+        },
+        {
+            name: 'a',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'First number',
+            required: true
+        },
+        {
+            name: 'b',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'Second number (required for binary operations)',
+            required: false
+        }
+    ]
+})(mathCalculator);
+(0, opal_tools_sdk_1.tool)({
+    name: 'unit-converter',
+    description: 'Converts between different units (temperature, distance, weight)',
+    parameters: [
+        {
+            name: 'value',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'The value to convert',
+            required: true
+        },
+        {
+            name: 'from',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Source unit',
+            required: true
+        },
+        {
+            name: 'to',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Target unit',
+            required: true
+        },
+        {
+            name: 'category',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Category: "temperature", "distance", or "weight"',
+            required: true
+        }
+    ]
+})(unitConverter);
+(0, opal_tools_sdk_1.tool)({
+    name: 'text-analyzer',
+    description: 'Analyzes text and provides statistics (word count, character count, reading time, etc.)',
+    parameters: [
+        {
+            name: 'text',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'The text to analyze',
+            required: true
+        }
+    ]
+})(textAnalyzer);
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
