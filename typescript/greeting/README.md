@@ -1,6 +1,6 @@
 # Sample TypeScript Tools Service
 
-This is a sample tools service for Opal using the TypeScript SDK. It provides seven powerful tools:
+This is a sample tools service for Opal using the TypeScript SDK. It provides eight powerful tools:
 
 1. **Greeting Tool**: Greets a person in a random language (English, Spanish, or French)
 2. **Today's Date Tool**: Returns today's date in the specified format
@@ -9,6 +9,7 @@ This is a sample tools service for Opal using the TypeScript SDK. It provides se
 5. **Math Calculator Tool**: Performs mathematical operations (add, subtract, multiply, divide, etc.)
 6. **Unit Converter Tool**: Converts between units (temperature, distance, weight)
 7. **Text Analyzer Tool**: Analyzes text and provides statistics
+8. **Sales Figures Generator**: Generates realistic fake sales data with industries, clients, and deal amounts
 
 ## Running the Service
 
@@ -49,6 +50,7 @@ Once the service is running, you can access:
   - Math calculator: http://localhost:3000/tools/math-calculator
   - Unit converter: http://localhost:3000/tools/unit-converter
   - Text analyzer: http://localhost:3000/tools/text-analyzer
+  - Sales figures: http://localhost:3000/tools/sales-figures
 
 ## Example Requests
 
@@ -210,3 +212,73 @@ Response:
   "readingTimeMinutes": 1
 }
 ```
+
+### Sales Figures Generator Tool
+
+```bash
+# Generate sales data for Technology industry
+curl -X POST http://localhost:3000/tools/sales-figures \
+  -H "Content-Type: application/json" \
+  -d '{"industry":"Technology","count":5,"year":2025}'
+
+# Generate random industry sales data
+curl -X POST http://localhost:3000/tools/sales-figures \
+  -H "Content-Type: application/json" \
+  -d '{"count":15}'
+
+# Generate Healthcare sales data
+curl -X POST http://localhost:3000/tools/sales-figures \
+  -H "Content-Type: application/json" \
+  -d '{"industry":"Healthcare","count":8}'
+```
+
+Response:
+```json
+{
+  "industry": "Technology",
+  "year": 2025,
+  "recordCount": 5,
+  "salesRecords": [
+    {
+      "clientName": "TechCorp",
+      "industry": "Technology",
+      "contactPerson": "Sarah Johnson",
+      "salesAmount": 185000,
+      "formattedAmount": "$185,000",
+      "quarter": "Q3 2025",
+      "status": "Closed Won",
+      "dealProbability": 100
+    },
+    {
+      "clientName": "DataSystems",
+      "industry": "Technology",
+      "contactPerson": "Michael Brown",
+      "salesAmount": 142000,
+      "formattedAmount": "$142,000",
+      "quarter": "Q2 2025",
+      "status": "In Progress",
+      "dealProbability": 75
+    }
+  ],
+  "summary": {
+    "totalSales": 725000,
+    "formattedTotal": "$725,000",
+    "averageSale": 145000,
+    "formattedAverage": "$145,000",
+    "closedDeals": 3,
+    "closedDealsTotal": 450000,
+    "formattedClosedTotal": "$450,000",
+    "winRate": "60%"
+  }
+}
+```
+
+**Available Industries:**
+- Technology
+- Healthcare
+- Finance
+- Retail
+- Manufacturing
+- Education
+- Real Estate
+- Energy

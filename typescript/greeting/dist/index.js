@@ -312,6 +312,111 @@ async function textAnalyzer(parameters) {
         readingTimeMinutes: Math.ceil(words.length / 200) // Assuming 200 words per minute
     };
 }
+/**
+ * Sales Figures Generator Tool: Generates fake sales data by industry
+ */
+async function salesFigures(parameters) {
+    const { industry, count = 10, year = new Date().getFullYear() } = parameters;
+    // Industry data with typical company name patterns
+    const industries = {
+        'Technology': {
+            companies: ['TechCorp', 'DataSystems', 'CloudFlow', 'ByteWorks', 'NexGen Solutions', 'CodeCraft', 'Digital Dynamics', 'InnovateTech', 'SmartSoft', 'CyberCore'],
+            avgDeal: 150000,
+            variance: 0.7
+        },
+        'Healthcare': {
+            companies: ['MediCare Plus', 'HealthFirst', 'VitalCare', 'WellnessGroup', 'CurePoint', 'LifeLink Medical', 'CarePath', 'HealthBridge', 'MediTrust', 'Wellness Partners'],
+            avgDeal: 200000,
+            variance: 0.6
+        },
+        'Finance': {
+            companies: ['Capital Ventures', 'FinSecure', 'WealthWise', 'TrustBank Corp', 'InvestPro', 'Financial Frontiers', 'SecureAssets', 'MoneyMatters', 'FiscalPoint', 'Prosperity Partners'],
+            avgDeal: 300000,
+            variance: 0.8
+        },
+        'Retail': {
+            companies: ['ShopSmart', 'RetailHub', 'MegaMart', 'BuyMore', 'The Trading Post', 'MarketPlace Pro', 'Consumer Central', 'QuickBuy', 'ValueStore', 'Premium Retail'],
+            avgDeal: 75000,
+            variance: 0.5
+        },
+        'Manufacturing': {
+            companies: ['BuildCorp', 'Industrial Works', 'MakeTech', 'Production Plus', 'FactoryPro', 'Assembly Line Inc', 'Fabrication Group', 'ManuSystems', 'Precision Parts', 'Industrial Solutions'],
+            avgDeal: 250000,
+            variance: 0.7
+        },
+        'Education': {
+            companies: ['EduTech Solutions', 'Learning Systems', 'Academy Pro', 'Knowledge Partners', 'ScholarWorks', 'Educational Edge', 'Campus Connect', 'Student Success Inc', 'TeachForward', 'Bright Minds'],
+            avgDeal: 100000,
+            variance: 0.6
+        },
+        'Real Estate': {
+            companies: ['Property Pros', 'RealtyWorks', 'Estate Masters', 'HomeFinders', 'Prime Properties', 'Skyline Realty', 'Urban Spaces', 'Landmark Group', 'Horizon Estates', 'Premier Realty'],
+            avgDeal: 180000,
+            variance: 0.9
+        },
+        'Energy': {
+            companies: ['PowerGen', 'EnergyCore', 'GreenWatt', 'SolarTech', 'FuelSystems', 'Renewable Resources', 'PowerFlow', 'Energy Solutions', 'EcoEnergy', 'GridTech'],
+            avgDeal: 350000,
+            variance: 0.8
+        }
+    };
+    // Select industry
+    const selectedIndustry = industry && industries[industry]
+        ? industry
+        : Object.keys(industries)[Math.floor(Math.random() * Object.keys(industries).length)];
+    const industryData = industries[selectedIndustry];
+    if (!industryData) {
+        throw new Error(`Unknown industry: ${selectedIndustry}. Available industries: ${Object.keys(industries).join(', ')}`);
+    }
+    // Generate sales records
+    const salesRecords = [];
+    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+    for (let i = 0; i < count; i++) {
+        const companyName = industryData.companies[Math.floor(Math.random() * industryData.companies.length)];
+        const quarter = quarters[Math.floor(Math.random() * quarters.length)];
+        // Generate realistic sales figure with variance
+        const variance = (Math.random() - 0.5) * 2 * industryData.variance;
+        const salesAmount = Math.round(industryData.avgDeal * (1 + variance));
+        // Generate deal status
+        const statuses = ['Closed Won', 'Closed Won', 'Closed Won', 'In Progress', 'Pending'];
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        // Generate contact person
+        const firstNames = ['John', 'Sarah', 'Michael', 'Emily', 'David', 'Jennifer', 'Robert', 'Lisa', 'James', 'Amanda'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+        const contactPerson = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+        salesRecords.push({
+            clientName: companyName,
+            industry: selectedIndustry,
+            contactPerson: contactPerson,
+            salesAmount: salesAmount,
+            formattedAmount: `$${salesAmount.toLocaleString()}`,
+            quarter: `${quarter} ${year}`,
+            status: status,
+            dealProbability: status === 'Closed Won' ? 100 : Math.floor(Math.random() * 40) + 50
+        });
+    }
+    // Calculate summary statistics
+    const totalSales = salesRecords.reduce((sum, record) => sum + record.salesAmount, 0);
+    const averageSale = totalSales / salesRecords.length;
+    const closedWonCount = salesRecords.filter(r => r.status === 'Closed Won').length;
+    const closedWonTotal = salesRecords.filter(r => r.status === 'Closed Won').reduce((sum, r) => sum + r.salesAmount, 0);
+    return {
+        industry: selectedIndustry,
+        year: year,
+        recordCount: salesRecords.length,
+        salesRecords: salesRecords,
+        summary: {
+            totalSales: totalSales,
+            formattedTotal: `$${totalSales.toLocaleString()}`,
+            averageSale: Math.round(averageSale),
+            formattedAverage: `$${Math.round(averageSale).toLocaleString()}`,
+            closedDeals: closedWonCount,
+            closedDealsTotal: closedWonTotal,
+            formattedClosedTotal: `$${closedWonTotal.toLocaleString()}`,
+            winRate: `${Math.round((closedWonCount / salesRecords.length) * 100)}%`
+        }
+    };
+}
 // Register the tools using decorators with explicit parameter definitions
 (0, opal_tools_sdk_1.tool)({
     name: 'greeting',
@@ -457,6 +562,30 @@ async function textAnalyzer(parameters) {
         }
     ]
 })(textAnalyzer);
+(0, opal_tools_sdk_1.tool)({
+    name: 'sales-figures',
+    description: 'Generates fake sales figures with realistic client names, industries, and deal amounts',
+    parameters: [
+        {
+            name: 'industry',
+            type: opal_tools_sdk_1.ParameterType.String,
+            description: 'Industry sector (Technology, Healthcare, Finance, Retail, Manufacturing, Education, Real Estate, Energy). If not specified, random industry is selected',
+            required: false
+        },
+        {
+            name: 'count',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'Number of sales records to generate (default: 10)',
+            required: false
+        },
+        {
+            name: 'year',
+            type: opal_tools_sdk_1.ParameterType.Number,
+            description: 'Year for the sales data (default: current year)',
+            required: false
+        }
+    ]
+})(salesFigures);
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
