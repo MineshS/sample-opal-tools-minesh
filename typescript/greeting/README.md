@@ -43,21 +43,21 @@ Once the service is running, you can access:
 
 - Discovery endpoint: http://localhost:3000/discovery
 - Tools endpoints:
-  - Greeting tool: http://localhost:3000/tools/greeting
-  - Today's date tool: http://localhost:3000/tools/todays-date
-  - Random generator: http://localhost:3000/tools/random-generator
-  - String utility: http://localhost:3000/tools/string-utility
-  - Math calculator: http://localhost:3000/tools/math-calculator
-  - Unit converter: http://localhost:3000/tools/unit-converter
-  - Text analyzer: http://localhost:3000/tools/text-analyzer
-  - Sales figures: http://localhost:3000/tools/sales-figures
+  - Greeting tool: http://localhost:3000/tools/minesh-greeting
+  - Today's date tool: http://localhost:3000/tools/minesh-todays-date
+  - Random generator: http://localhost:3000/tools/minesh-random-generator
+  - String utility: http://localhost:3000/tools/minesh-string-utility
+  - Math calculator: http://localhost:3000/tools/minesh-math-calculator
+  - Unit converter: http://localhost:3000/tools/minesh-unit-converter
+  - Text analyzer: http://localhost:3000/tools/minesh-text-analyzer
+  - Sales figures: http://localhost:3000/tools/minesh-sales-figures
 
 ## Example Requests
 
 ### Greeting Tool
 
 ```bash
-curl -X POST http://localhost:3000/tools/greeting \
+curl -X POST http://localhost:3000/tools/minesh-greeting \
   -H "Content-Type: application/json" \
   -d '{"name":"John"}'
 ```
@@ -73,7 +73,7 @@ Response:
 ### Today's Date Tool
 
 ```bash
-curl -X POST http://localhost:3000/tools/todays-date \
+curl -X POST http://localhost:3000/tools/minesh-todays-date \
   -H "Content-Type: application/json" \
   -d '{"format":"%B %d, %Y"}'
 ```
@@ -91,17 +91,17 @@ Response:
 
 ```bash
 # Generate a random number
-curl -X POST http://localhost:3000/tools/random-generator \
+curl -X POST http://localhost:3000/tools/minesh-random-generator \
   -H "Content-Type: application/json" \
   -d '{"type":"number","min":1,"max":100}'
 
 # Generate a UUID
-curl -X POST http://localhost:3000/tools/random-generator \
+curl -X POST http://localhost:3000/tools/minesh-random-generator \
   -H "Content-Type: application/json" \
   -d '{"type":"uuid"}'
 
 # Generate a password
-curl -X POST http://localhost:3000/tools/random-generator \
+curl -X POST http://localhost:3000/tools/minesh-random-generator \
   -H "Content-Type: application/json" \
   -d '{"type":"password","length":16}'
 ```
@@ -110,12 +110,12 @@ curl -X POST http://localhost:3000/tools/random-generator \
 
 ```bash
 # Convert to slug
-curl -X POST http://localhost:3000/tools/string-utility \
+curl -X POST http://localhost:3000/tools/minesh-string-utility \
   -H "Content-Type: application/json" \
   -d '{"text":"Hello World! This is a Test","operation":"slug"}'
 
 # Convert to uppercase
-curl -X POST http://localhost:3000/tools/string-utility \
+curl -X POST http://localhost:3000/tools/minesh-string-utility \
   -H "Content-Type: application/json" \
   -d '{"text":"hello world","operation":"uppercase"}'
 ```
@@ -133,17 +133,17 @@ Response:
 
 ```bash
 # Add two numbers
-curl -X POST http://localhost:3000/tools/math-calculator \
+curl -X POST http://localhost:3000/tools/minesh-math-calculator \
   -H "Content-Type: application/json" \
   -d '{"operation":"add","a":15,"b":27}'
 
 # Calculate square root
-curl -X POST http://localhost:3000/tools/math-calculator \
+curl -X POST http://localhost:3000/tools/minesh-math-calculator \
   -H "Content-Type: application/json" \
   -d '{"operation":"sqrt","a":144}'
 
 # Calculate percentage
-curl -X POST http://localhost:3000/tools/math-calculator \
+curl -X POST http://localhost:3000/tools/minesh-math-calculator \
   -H "Content-Type: application/json" \
   -d '{"operation":"percentage","a":20,"b":150}'
 ```
@@ -161,17 +161,17 @@ Response:
 
 ```bash
 # Convert temperature
-curl -X POST http://localhost:3000/tools/unit-converter \
+curl -X POST http://localhost:3000/tools/minesh-unit-converter \
   -H "Content-Type: application/json" \
   -d '{"value":100,"from":"celsius","to":"fahrenheit","category":"temperature"}'
 
 # Convert distance
-curl -X POST http://localhost:3000/tools/unit-converter \
+curl -X POST http://localhost:3000/tools/minesh-unit-converter \
   -H "Content-Type: application/json" \
   -d '{"value":5,"from":"kilometer","to":"mile","category":"distance"}'
 
 # Convert weight
-curl -X POST http://localhost:3000/tools/unit-converter \
+curl -X POST http://localhost:3000/tools/minesh-unit-converter \
   -H "Content-Type: application/json" \
   -d '{"value":150,"from":"pound","to":"kilogram","category":"weight"}'
 ```
@@ -190,7 +190,7 @@ Response:
 ### Text Analyzer Tool
 
 ```bash
-curl -X POST http://localhost:3000/tools/text-analyzer \
+curl -X POST http://localhost:3000/tools/minesh-text-analyzer \
   -H "Content-Type: application/json" \
   -d '{"text":"The quick brown fox jumps over the lazy dog. This is a test sentence."}'
 ```
@@ -217,17 +217,17 @@ Response:
 
 ```bash
 # Generate sales data for Technology industry
-curl -X POST http://localhost:3000/tools/sales-figures \
+curl -X POST http://localhost:3000/tools/minesh-sales-figures \
   -H "Content-Type: application/json" \
   -d '{"industry":"Technology","count":5,"year":2025}'
 
 # Generate random industry sales data
-curl -X POST http://localhost:3000/tools/sales-figures \
+curl -X POST http://localhost:3000/tools/minesh-sales-figures \
   -H "Content-Type: application/json" \
   -d '{"count":15}'
 
 # Generate Healthcare sales data
-curl -X POST http://localhost:3000/tools/sales-figures \
+curl -X POST http://localhost:3000/tools/minesh-sales-figures \
   -H "Content-Type: application/json" \
   -d '{"industry":"Healthcare","count":8}'
 ```

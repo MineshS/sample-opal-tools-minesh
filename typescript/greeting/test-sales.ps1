@@ -12,7 +12,7 @@ $body1 = @{
 } | ConvertTo-Json
 
 try {
-    $response1 = Invoke-RestMethod -Uri "http://localhost:3000/tools/sales-figures" -Method POST -ContentType "application/json" -Body $body1
+    $response1 = Invoke-RestMethod -Uri "http://localhost:3000/tools/minesh-sales-figures" -Method POST -ContentType "application/json" -Body $body1
     Write-Host "Industry: $($response1.industry)" -ForegroundColor Yellow
     Write-Host "Year: $($response1.year)" -ForegroundColor Yellow
     Write-Host "Total Sales: $($response1.summary.formattedTotal)" -ForegroundColor Green
@@ -39,7 +39,7 @@ $body2 = @{
 } | ConvertTo-Json
 
 try {
-    $response2 = Invoke-RestMethod -Uri "http://localhost:3000/tools/sales-figures" -Method POST -ContentType "application/json" -Body $body2
+    $response2 = Invoke-RestMethod -Uri "http://localhost:3000/tools/minesh-sales-figures" -Method POST -ContentType "application/json" -Body $body2
     Write-Host "Industry: $($response2.industry)" -ForegroundColor Yellow
     Write-Host "Total Sales: $($response2.summary.formattedTotal)" -ForegroundColor Green
     Write-Host ""
@@ -62,7 +62,7 @@ $body3 = @{
 } | ConvertTo-Json
 
 try {
-    $response3 = Invoke-RestMethod -Uri "http://localhost:3000/tools/sales-figures" -Method POST -ContentType "application/json" -Body $body3
+    $response3 = Invoke-RestMethod -Uri "http://localhost:3000/tools/minesh-sales-figures" -Method POST -ContentType "application/json" -Body $body3
     Write-Host "Industry: $($response3.industry)" -ForegroundColor Yellow
     Write-Host "Year: $($response3.year)" -ForegroundColor Yellow
     Write-Host "Record Count: $($response3.recordCount)" -ForegroundColor Yellow

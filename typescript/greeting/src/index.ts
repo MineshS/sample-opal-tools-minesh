@@ -531,7 +531,7 @@ async function salesFigures(parameters: SalesFiguresParameters) {
 
 // Register the tools using decorators with explicit parameter definitions
 tool({
-  name: 'greeting',
+  name: 'minesh-greeting',
   description: 'Greets a person in a random language (English, Spanish, or French)',
   parameters: [
     {
@@ -550,7 +550,7 @@ tool({
 })(greeting);
 
 tool({
-  name: 'todays-date',
+  name: 'minesh-todays-date',
   description: 'Returns today\'s date in the specified format',
   parameters: [
     {
@@ -563,7 +563,7 @@ tool({
 })(todaysDate);
 
 tool({
-  name: 'random-generator',
+  name: 'minesh-random-generator',
   description: 'Generates random values (number, UUID, or password)',
   parameters: [
     {
@@ -594,7 +594,7 @@ tool({
 })(randomGenerator);
 
 tool({
-  name: 'string-utility',
+  name: 'minesh-string-utility',
   description: 'Performs string operations: uppercase, lowercase, reverse, slug, capitalize, or title case',
   parameters: [
     {
@@ -613,7 +613,7 @@ tool({
 })(stringUtility);
 
 tool({
-  name: 'math-calculator',
+  name: 'minesh-math-calculator',
   description: 'Performs mathematical operations: add, subtract, multiply, divide, power, sqrt, percentage, abs, round, floor, ceil',
   parameters: [
     {
@@ -638,7 +638,7 @@ tool({
 })(mathCalculator);
 
 tool({
-  name: 'unit-converter',
+  name: 'minesh-unit-converter',
   description: 'Converts between different units (temperature, distance, weight)',
   parameters: [
     {
@@ -669,7 +669,7 @@ tool({
 })(unitConverter);
 
 tool({
-  name: 'text-analyzer',
+  name: 'minesh-text-analyzer',
   description: 'Analyzes text and provides statistics (word count, character count, reading time, etc.)',
   parameters: [
     {
@@ -682,7 +682,7 @@ tool({
 })(textAnalyzer);
 
 tool({
-  name: 'sales-figures',
+  name: 'minesh-sales-figures',
   description: 'Generates fake sales figures with realistic client names, industries, and deal amounts',
   parameters: [
     {
